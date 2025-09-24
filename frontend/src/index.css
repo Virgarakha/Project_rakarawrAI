@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* index.css */
+.wavy-background {
+  background: linear-gradient(
+    45deg,
+    rgba(0, 0, 100, 0.7), /* Darker blue with higher opacity */
+    rgba(255, 255, 255, 0.1), /* Lighter white for contrast */
+    rgba(0, 0, 0, 0.8), /* Darker black with higher opacity */
+    rgba(0, 0, 100, 0.7) /* Match starting color */
+  );
+  background-size: 400% 400%;
+  animation: waveAnimation 15s ease infinite;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@keyframes waveAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Fallback for browsers that don’t support backdrop-filter */
+@supports not (backdrop-filter: blur(10px)) {
+  .wavy-background {
+    background: linear-gradient(
+      45deg,
+      rgba(0, 0, 100, 0.8),
+      rgba(255, 255, 255, 0.2),
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 100, 0.8)
+    );
+  }
+}
+
+/* Global scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000; /* Dark gray track */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000000; /* Grayish-black thumb */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000000; /* Lighter gray on hover */
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #292929 #00000000;
+}
