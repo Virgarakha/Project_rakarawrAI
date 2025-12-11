@@ -31,7 +31,7 @@ const MessageList = React. memo(({ messages, messagesEndRef, isLoading }) => {
                 <div className="w-40 h-40 bg-gray-300 animate-pulse rounded" />
               ) : (
                 <img
-                  src={m. photo_path. startsWith("https") ? m. photo_path : `https://api-ai.rakarawr.com/storage/${m. photo_path}`}
+                  src={m. photo_path. startsWith("https") ? m. photo_path : `http://127.0.0.1:8000/storage/${m. photo_path}`}
                   alt="chat attachment"
                   className="w-full h-full object-cover rounded"
                 />
@@ -93,6 +93,8 @@ export default function Chat() {
   const [isPhotoPopupOpen, setIsPhotoPopupOpen] = useState(false); // State untuk mengontrol popup
   const messagesEndRef = useRef(null);
 
+  console.log("Avatar user:", user.avatar);
+
   const handleToggleCollapse = () => setIsCollapsed(! isCollapsed);
   const handlePhotoChange = (e) => { if (e. target. files?.[0]) setPhoto(e. target. files[0]); };
   const handleRemovePhoto = () => setPhoto(null);
@@ -117,7 +119,7 @@ export default function Chat() {
 
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(`https://api-ai.rakarawr.com/api/chats/${chatId}`, {
+      const res = await axios.get(`http://127.0.0.1:8000/api/chats/${chatId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessages(res.data);
@@ -154,7 +156,7 @@ export default function Chat() {
   const fetchChatTitle = async () => {
     if (! chatId) return;
     try {
-      const res = await axios. get(`https://api-ai.rakarawr.com/api/chats`, {
+      const res = await axios. get(`http://127.0.0.1:8000/api/chats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const currentChat = res. data. find(chat => chat. id == chatId);
@@ -166,7 +168,7 @@ export default function Chat() {
 
   const updateChatTitle = async (newTitle) => {
     try {
-      await axios. put(`https://api-ai.rakarawr.com/api/updateChat/${chatId}`,
+      await axios. put(`http://127.0.0.1:8000/api/updateChat/${chatId}`,
         { title: newTitle },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -201,7 +203,7 @@ export default function Chat() {
     if (photo) formData.append("photo", photo);
 
     const res = await axios.post(
-      `https://api-ai.rakarawr.com/api/chat/${chatId}`,
+      `http://127.0.0.1:8000/api/chat/${chatId}`,
       formData,
       {
         headers: {
@@ -237,7 +239,7 @@ export default function Chat() {
     const createNewChat = async () => {
     try {
       const res = await axios.post(
-        "https://api-ai.rakarawr.com/api/chats",
+        "http://127.0.0.1:8000/api/chats",
         { title: "Chat Baru" },
         { headers: { Authorization: `Bearer ${token}` } }
       );

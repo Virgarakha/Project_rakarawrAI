@@ -7,53 +7,48 @@ use Illuminate\Support\Facades\Storage;
 
 class GeminiService
 {
-    // Ini prompt gaya bicara default
-    protected $stylePrompt;
-
-    public function __construct()
+    public function sendMessage($historyText, $photoPath = null)
     {
-        // Bisa diubah sesuai gaya yang diinginkan
-        $this->stylePrompt = "Kamu dikembangkan oleh rakarawr.Ai, kamu adalah model rakai-0-9 siap untuk melayani mu";
-    }
+        $url = "https://api.groq.com/openai/v1/chat/completions";
 
-    public function setStylePrompt($prompt)
-    {
-        $this->stylePrompt = $prompt;
-    }
-
-    public function sendMessage($userMessage, $photoPath = null)
-    {
-        // Gabungkan style + pesan user
-        $fullPrompt = $this->stylePrompt . "\nUser: " . $userMessage;
-
-        $data = [
-            'contents' => [[
-                'parts' => [['text' => $fullPrompt]]
-            ]]
+        // Base content
+        $content = [
+            [
+                "type" => "text",
+                "text" => $historyText
+            ]
         ];
 
-        // Jika ada foto
+        // Jika ada foto → tempel sebagai `input_image`
         if ($photoPath) {
             $imageData = base64_encode(Storage::disk('public')->get($photoPath));
-            $data['contents'][0]['parts'][] = [
-                'inline_data' => [
-                    'mime_type' => 'image/jpeg',
-                    'data' => $imageData
-                ]
+
+            $content[] = [
+                "type" => "input_image",
+                "image_url" => "data:image/jpeg;base64," . $imageData
             ];
         }
 
+        $data = [
+            "model" => "groq/compound",
+            "messages" => [
+                [
+                    "role" => "user",
+                    "content" => $content
+                ]
+            ]
+        ];
+
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post(
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" . env('GEMINI_API_KEY'),
-            $data
-        );
+            "Authorization" => "Bearer " . env("GROQ_API_KEY"),
+            "Content-Type" => "application/json"
+        ])->post($url, $data);
 
         if ($response->failed()) {
-            return "⚠️ Maaf, ada error dari Gemini.";
+            return "⚠️ Groq Error: " . $response->body();
         }
 
-        return $response->json()['candidates'][0]['content']['parts'][0]['text'] ?? "❌ Tidak ada jawaban.";
+        return $response->json()['choices'][0]['message']['content']
+               ?? "❌ Tidak ada jawaban dari AI.";
     }
 }

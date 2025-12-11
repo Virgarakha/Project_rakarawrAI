@@ -37,7 +37,7 @@ const saveEditTitle = async () => {
   if (!editTitle.trim()) return;
   try {
     await axios.put(
-      `https://api-ai.rakarawr.com/api/updateChat/${editChatId}`,
+      `http://127.0.0.1:8000/api/updateChat/${editChatId}`,
       { title: editTitle },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -59,7 +59,7 @@ const saveEditTitle = async () => {
 
   const fetchChats = async () => {
     try {
-      const res = await axios.get("https://api-ai.rakarawr.com/api/chats", {
+      const res = await axios.get("http://127.0.0.1:8000/api/chats", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setChats(res.data);
@@ -73,7 +73,7 @@ const saveEditTitle = async () => {
   const createNewChat = async () => {
     try {
       const res = await axios.post(
-        "https://api-ai.rakarawr.com/public/api/chats",
+        "http://127.0.0.1:8000/api/chats",
         { title: "Chat Baru" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -88,7 +88,7 @@ const saveEditTitle = async () => {
   const createVoiceChat = async () => {
     try {
       const res = await axios.post(
-        "https://api-ai.rakarawr.com/public/api/chats",
+        "http://127.0.0.1:8000/api/chats",
         { title: "Chat Baru" },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -104,7 +104,7 @@ const saveEditTitle = async () => {
     e.stopPropagation();
     if (!confirm("Hapus chat ini?")) return;
     try {
-      await axios.delete(`https://api-ai.rakarawr.com/api/chats/${chatId}`, {
+      await axios.delete(`http://127.0.0.1:8000/api/chats/${chatId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setChats(chats.filter(chat => chat.id !== chatId));
@@ -163,7 +163,7 @@ className={`
         {/* Header */}
         <div className="p-4 border-b border-[#303030]">
           <div className="flex items-center justify-between mb-4">
-            {!isCollapsed && <h2 className="text-xl font-semibold">rakarawr.ai</h2>}
+            {!isCollapsed && <h2 className="text-xl font-semibold">ai</h2>}
             
             {/* Toggle button */}
             <button

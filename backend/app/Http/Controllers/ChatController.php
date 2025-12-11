@@ -2,16 +2,17 @@
 namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\Message;
-use App\Services\GeminiService;
+use App\Services\VisionService;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
-    protected $gemini;
+protected $vision;
 
-    public function __construct(GeminiService $gemini) {
-        $this->gemini = $gemini;
-    }
+public function __construct(VisionService $vision) {
+    $this->vision = $vision;
+}
+
 
 public function index(Request $request) {
     return Chat::where('user_id', $request->user()->id)
@@ -67,7 +68,7 @@ public function sendMessage(Request $request, $id)
         ->get()
         ->reverse();
 
-    $prompt = "Kamu adalah asisten ramah.\n\nHistory chat:\n";
+    $prompt = "Kamu adalah asisten ramah dan pintar membaca gambar.\n\nHistory chat:\n";
     foreach ($history as $msg) {
         $role = $msg->sender === 'user' ? 'User' : 'Assistant';
         $content = $msg->message;
@@ -77,7 +78,7 @@ public function sendMessage(Request $request, $id)
         $prompt .= "{$role}: {$content}\n";
     }
 
-    $aiReply = $this->gemini->sendMessage($prompt, $photoPath);
+    $aiReply = $this->vision->sendMessage($prompt, $photoPath);
 
     $aiMessage = Message::create([
         'chat_id' => $chat->id,

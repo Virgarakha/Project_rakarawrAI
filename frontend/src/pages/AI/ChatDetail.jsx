@@ -31,7 +31,7 @@ const MessageList = React.memo(({ messages, messagesEndRef, isLoading }) => {
                 <div className="w-40 h-40 bg-gray-300 animate-pulse rounded" />
               ) : (
                 <img
-                  src={m.photo_path.startsWith("https") ? m.photo_path : `https://api-ai.rakarawr.com/storage/${m.photo_path}`}
+                  src={m.photo_path.startsWith("https") ? m.photo_path : `http://127.0.0.1:8000/storage/${m.photo_path}`}
                   alt="chat attachment"
                   className="w-full h-full object-cover rounded"
                 />
@@ -113,7 +113,7 @@ export default function ChatDetail() {
 
     const fetchMessages = async () => {
       try {
-        const res = await axios.get(`https://api-ai.rakarawr.com/api/chats/${chatId}`, {
+        const res = await axios.get(`http://127.0.0.1:8000/api/chats/${chatId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMessages(res.data);
@@ -144,7 +144,7 @@ export default function ChatDetail() {
 const fetchChatTitle = async () => {
   if (!chatId) return;
   try {
-    const res = await axios.get(`https://api-ai.rakarawr.com/api/chats`, {
+    const res = await axios.get(`http://127.0.0.1:8000/api/chats`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(res.data); // cek apakah setiap chat punya title
@@ -163,7 +163,7 @@ const fetchChatTitle = async () => {
 
   const updateChatTitle = async (newTitle) => {
     try {
-      await axios.put(`https://api-ai.rakarawr.com/api/updateChat/${chatId}`, { title: newTitle }, {
+      await axios.put(`http://127.0.0.1:8000/api/updateChat/${chatId}`, { title: newTitle }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setChatTitle(newTitle);
@@ -197,7 +197,7 @@ const fetchChatTitle = async () => {
       if (photo) formData.append("photo", photo);
 
       const res = await axios.post(
-        `https://api-ai.rakarawr.com/api/chat/${chatId}`,
+        `http://127.0.0.1:8000/api/chat/${chatId}`,
         formData,
         {
           headers: {
@@ -240,7 +240,7 @@ const fetchChatTitle = async () => {
       <div className={`flex flex-col flex-1 transition-all duration-300 ${sidebarOpen ? 'md:ml-80' : ''}`} style={{ maxWidth: '100vw', overflow: 'hidden' }}>
         <div className="h-[10vh] flex w-full justify-start gap-2 lg:justify-between items-center px-5">
           <p className="flex items-center gap-3 mb-5 text-xs p-3 bg-[#1d1d1f] border border-[#303030] hover:bg-[#2c2c2e] text-white rounded-lg">
-            Model <MoveRight size={15} /> rakai-0-9.
+            Model <MoveRight size={15} /> Gemini 2.5
           </p>
           <button className="flex items-center gap-3 mb-5 text-xs p-3 bg-[#1d1d1f] border border-[#303030] hover:bg-[#2c2c2e] text-white rounded-lg">
             <Share size={15}/> Share 

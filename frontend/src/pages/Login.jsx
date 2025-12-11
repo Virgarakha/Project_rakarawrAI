@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, LogIn, Eye, EyeOff, Github } from 'lucide-react';
 import axios from "axios";
 
-const API_URL = 'https://api-ai.rakarawr.com/public/api';
+const API_URL = 'http://127.0.0.1:8000/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -32,11 +32,11 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "https://api-ai.rakarawr.com/api/auth/google";
+    window.location.href = "http://127.0.0.1:8000/api/auth/google";
   };
 
   const handleGithubLogin = () => {
-    window.location.href = "https://api-ai.rakarawr.com/api/auth/github"
+    window.location.href = "http://127.0.0.1:8000/api/auth/github"
   }
 
   return (
